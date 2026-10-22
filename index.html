@@ -211,18 +211,18 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
 
   <nav class="index" aria-label="Projects">
     <ol>
-      <li><a href="#dropsense"><span class="idx-title">Capacitive sensor boards</span><span class="idx-meta">DropSense · 2026</span><span class="idx-sum">A 1.1 × 0.5 in readout board and probe for a water-quality sensor startup.</span></a></li>
-      <li><a href="#flight-controller"><span class="idx-title">Flight controller that is also the frame</span><span class="idx-meta">Stanford UAV · 2026</span><span class="idx-sum">Leading a team designing a micro drone around one structural PCB.</span></a></li>
+      <li><a href="#dropsense"><span class="idx-title">Capacitive sensor boards</span><span class="idx-meta">DropSense · 2026</span><span class="idx-sum">A 1.1 × 0.5 in readout board and probe for DropSense, a spinout from Stanford's Tarpeh Lab.</span></a></li>
+      <li><a href="#flight-controller"><span class="idx-title">Custom microdrone flight controller</span><span class="idx-meta">Stanford UAV club · 2026</span><span class="idx-sum">Leading a team in Stanford's UAV club designing a flight controller PCB that doubles as the drone's frame.</span></a></li>
       <li><a href="#glove"><span class="idx-title">Gesture-controlled drone camera</span><span class="idx-meta">Independent · 2026</span><span class="idx-sum">A sensor glove that flies a drone, plus a computer-vision mode.</span></a></li>
       <li><a href="#bare-metal"><span class="idx-title">Bare-metal RISC-V system</span><span class="idx-meta">CS107E · 2026</span><span class="idx-sum">Drivers, a memory allocator, and an interrupt-driven console with no operating system.</span></a></li>
-      <li><a href="#mango-run"><span class="idx-title">Mango Run</span><span class="idx-meta">CS107E final project · 2026</span><span class="idx-sum">A side-scrolling game on the Mango Pi that you play by physically jumping, read through an accelerometer.</span></a></li>
+      <li><a href="#mango-run"><span class="idx-title">mango-run</span><span class="idx-meta">CS107E final project · 2026</span><span class="idx-sum">A side-scrolling game on the Mango Pi that you play by physically jumping, read through an accelerometer.</span></a></li>
     </ol>
   </nav>
 
   <!-- DropSense -->
   <article class="project" id="dropsense">
     <div class="proj-head">
-      <div class="eyebrow">DropSense, a spinout from the Tarpeh Lab at Stanford</div>
+      <div class="eyebrow">DropSense · Spinout from Stanford's Tarpeh Lab</div>
       <h2>Capacitive sensor boards</h2>
       <div class="proj-sub"><span class="chip built">Built</span><span>Electrical Engineering Intern · Spring 2026 – present</span></div>
     </div>
@@ -235,7 +235,7 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
         <div><dt>Tools</dt><dd>KiCad, OnShape, 3D printing, soldering</dd></div>
       </dl>
       <div class="story">
-        <p>DropSense is building a small, low-cost sensor for nitrogen in wastewater. I designed the electronics that turn the sensor's capacitance into a number a microcontroller can read.</p>
+        <p>DropSense, a spinout from Stanford's Tarpeh Lab, is building a small, low-cost sensor for nitrogen in wastewater. I designed the electronics that turn the sensor's capacitance into a number a microcontroller can read.</p>
         <p>The probe's two electrodes form part of an LC tank. When the capacitance around the probe changes, the tank's resonant frequency shifts. A capacitance-to-digital converter counts that frequency against an external crystal oscillator and holds the result for the microcontroller to read over I2C.</p>
         <h3>Design decisions</h3>
         <ul class="decisions">
@@ -262,8 +262,8 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
   <!-- Skyrunners -->
   <article class="project" id="flight-controller">
     <div class="proj-head">
-      <div class="eyebrow">Stanford UAV · Skyrunners</div>
-      <h2>Flight controller that is also the frame</h2>
+      <div class="eyebrow">Stanford UAV Club · Skyrunners team</div>
+      <h2>Custom microdrone flight controller</h2>
       <div class="proj-sub"><span class="chip wip">In design</span><span>Technical Lead · Oct 2026 – present (Systems Engineer since Sep 2025)</span></div>
     </div>
     <div class="proj-body">
@@ -274,7 +274,7 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
         <div><dt>Tools</dt><dd>KiCad</dd></div>
       </dl>
       <div class="story">
-        <p>I lead a team building a micro drone where the custom flight controller PCB is also the structure. The motors mount directly into the board's arms, so there is no separate frame to build or carry.</p>
+        <p>I lead the Skyrunners team in Stanford's UAV club, building a micro drone whose custom flight controller PCB doubles as the frame. The motors mount directly into the board's arms, so there is no separate frame to build or carry.</p>
         <p>Because the board is the airframe, the electrical and mechanical decisions are tied together: where the IMU sits relative to the spinning motors, how motor current shares the battery with the logic, and how stiff the board needs to be to keep vibration out of the sensor readings.</p>
         <figure class="fc-fig">
           <img src="img/fc-3d.jpg" alt="3D render of the drone-shaped flight controller board: four arms ending in motor rings, the ESP32-S3 module at the front with its antenna past the edge, and the IMU near the center." width="791" height="773" loading="lazy">
@@ -289,7 +289,7 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
   <!-- Glove -->
   <article class="project" id="glove">
     <div class="proj-head">
-      <div class="eyebrow">Independent project</div>
+      <div class="eyebrow">Personal project · Built for fun over the summer</div>
       <h2>Gesture-controlled drone camera</h2>
       <div class="proj-sub"><span class="chip built">Flying</span><span>Summer 2026 – present</span></div>
     </div>
@@ -300,7 +300,7 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
         <div><dt>Software</dt><dd>Arduino C++, Python, djitellopy, OpenCV, MediaPipe</dd></div>
       </dl>
       <div class="story">
-        <p>A glove that flies a camera drone with hand movements. Four flex sensors sewn along the fingers measure how far each one bends, read through the ESP32's ADC, and an IMU on the wrist measures roll and pitch. Firmware on the ESP32 turns the hand shape and wrist tilt into flight commands and sends them to the drone over Wi-Fi.</p>
+        <p>A project I built for fun over Summer 2026, working on it in the evenings after my day job at DropSense. It's a glove that flies a camera drone with hand movements. Four flex sensors sewn along the fingers measure how far each one bends, read through the ESP32's ADC, and an IMU on the wrist measures roll and pitch. Firmware on the ESP32 turns the hand shape and wrist tilt into flight commands and sends them to the drone over Wi-Fi.</p>
         <p>A switch on the glove moves it into computer mode. There, glove data streams over USB serial to a Python program that flies the drone and shows its live camera feed, processed with OpenCV. MediaPipe tracks my other hand in the video, and an open left palm triggers a flip that overrides the glove.</p>
         <div class="glove-media">
           <figure class="glove-flight">
@@ -321,9 +321,9 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
         <table class="gestures">
           <thead><tr><th>Hand</th><th>Wrist</th><th>Drone</th></tr></thead>
           <tbody>
-            <tr><td>Open palm</td><td>Any, on the ground</td><td>Calibrates the IMU, then takes off</td></tr>
-            <tr><td>Open palm</td><td>Tilt forward / back<br>Tilt left / right</td><td>Climbs / descends<br>Turns left / right</td></tr>
-            <tr><td>Thumbs-up</td><td>Tilt forward / back<br>Tilt left / right</td><td>Flies forward / back<br>Flies left / right</td></tr>
+            <tr><td>Open palm</td><td>Any (drone on the ground)</td><td>Calibrates the IMU, then takes off</td></tr>
+            <tr><td>Open palm (drone in the air)</td><td>Tilt forward / back<br>Tilt left / right</td><td>Climbs / descends<br>Turns left / right</td></tr>
+            <tr><td>Fist</td><td>Tilt forward / back<br>Tilt left / right</td><td>Flies forward / back<br>Flies left / right</td></tr>
             <tr><td>Peace sign</td><td>Any</td><td>Lands</td></tr>
             <tr><td>Any</td><td>Level (under 35°)</td><td>Holds position</td></tr>
           </tbody>
@@ -363,11 +363,11 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
     </div>
   </article>
 
-  <!-- Mango Run -->
+  <!-- mango-run -->
   <article class="project" id="mango-run">
     <div class="proj-head">
       <div class="eyebrow">CS107E final project · Mango Pi, no operating system</div>
-      <h2>Mango Run</h2>
+      <h2>mango-run</h2>
       <div class="proj-sub"><span class="chip built">Playable</span><span>Spring 2026</span></div>
     </div>
     <div class="proj-body">
@@ -379,12 +379,12 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
         <div><dt>Language</dt><dd>C</dd></div>
       </dl>
       <div class="story">
-        <p>A pixel-art runner inspired by the offline dinosaur game, built on the graphics library I wrote during CS107E. You play it with your body instead of a keyboard. An accelerometer reads your motion: a real jump makes the runner jump over a cactus. Mangos float overhead as collectibles, the high score carries across rounds, and hitting a cactus brings up a game-over screen that holds for five seconds before the next round starts.</p>
+        <p>A pixel-art runner inspired by the offline dinosaur game, built on the graphics library I wrote during CS107E. You play it with your body instead of a keyboard: in the final version, you strap the box with the accelerometer to your body, and a real jump makes the runner jump over a cactus. Mangos float overhead as collectibles, the high score carries across rounds, and hitting a cactus brings up a game-over screen that holds for five seconds before the next round starts.</p>
 
         <div class="demo-grid">
           <figure>
             <video src="media/mango-run-player.mp4" poster="media/mango-run-player.jpg" width="720" height="1054" muted loop playsinline autoplay controls preload="metadata" aria-label="Nancy holding the accelerometer controller and jumping in front of the monitor while the game runs."></video>
-            <figcaption>Playing it: jump in real life to clear a cactus on screen. The accelerometer is in the purple controller.</figcaption>
+            <figcaption>A test run: jumping in real life to clear a cactus on screen, holding the purple box with the accelerometer. In the final version, the box straps onto your body.</figcaption>
           </figure>
           <figure>
             <video src="media/mango-run-screen.mp4" poster="media/mango-run-screen.jpg" width="720" height="626" muted loop playsinline autoplay controls preload="metadata" aria-label="Close-up of the monitor: the runner moves along the ground line as cacti and mangos scroll in, with the score counting up in the corner."></video>
