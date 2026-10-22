@@ -135,6 +135,8 @@ p { margin: 0; }
 .decisions li { padding-left: 18px; position: relative; }
 .decisions li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
 
+.fc-fig { margin: 8px 0 4px; max-width: 520px; }
+.fc-fig img { width: 100%; height: auto; display: block; }
 .figs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 @media (max-width: 640px) { .figs { grid-template-columns: minmax(0, 1fr); } }
 figure { margin: 0; display: grid; gap: 8px; }
@@ -268,12 +270,16 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
       <dl class="spec">
         <div><dt>Role</dt><dd>Technical lead for the team</dd></div>
         <div><dt>Board</dt><dd>Flight controller PCB shaped as the drone's frame, motor mounts in its arms</dd></div>
-        <div><dt>Planned parts</dt><dd>ESP32-S3, IMU, MOSFET drivers for four brushed motors, 1S LiPo</dd></div>
+        <div><dt>Parts</dt><dd>ESP32-S3, MPU-6050 IMU, MOSFET drivers for four brushed motors, buck-boost regulator, 1S LiPo</dd></div>
         <div><dt>Tools</dt><dd>KiCad</dd></div>
       </dl>
       <div class="story">
         <p>I lead a team building a micro drone where the custom flight controller PCB is also the structure. The motors mount directly into the board's arms, so there is no separate frame to build or carry.</p>
         <p>Because the board is the airframe, the electrical and mechanical decisions are tied together: where the IMU sits relative to the spinning motors, how motor current shares the battery with the logic, and how stiff the board needs to be to keep vibration out of the sensor readings.</p>
+        <figure class="fc-fig">
+          <img src="img/fc-3d.jpg" alt="3D render of the drone-shaped flight controller board: four arms ending in motor rings, the ESP32-S3 module at the front with its antenna past the edge, and the IMU near the center." width="791" height="773" loading="lazy">
+          <figcaption>Work in progress: the board placed in KiCad, shown in 3D. The ESP32-S3 antenna hangs past the front edge, the IMU sits near the center of rotation, and motor wire pads sit at the end of each arm. Routing is next.</figcaption>
+        </figure>
         <h3>Before this</h3>
         <p>As a systems engineer on the team's fixed-wing autonomous aircraft, I designed and tested fuselage and structural components, and planned the payload layout and vibration-isolating sensor mounts from center-of-gravity analysis.</p>
       </div>
