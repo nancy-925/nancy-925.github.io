@@ -126,6 +126,11 @@ p { margin: 0; }
 .story { display: grid; gap: 18px; min-width: 0; }
 .story p { max-width: 66ch; }
 .story h3 { font-size: 13px; font-family: var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.gestures { width: 100%; border-collapse: collapse; margin: 8px 0 28px; font-size: 15px; }
+.gestures th, .gestures td { text-align: left; vertical-align: top; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--rule); }
+.gestures th { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+.gestures td:first-child { font-weight: 600; white-space: nowrap; }
+@media (max-width: 560px) { .gestures td:first-child { white-space: normal; } }
 .decisions { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; max-width: 66ch; }
 .decisions li { padding-left: 18px; position: relative; }
 .decisions li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
@@ -284,21 +289,21 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
     </div>
     <div class="proj-body">
       <dl class="spec">
-        <div><dt>Hardware</dt><dd>Adafruit ESP32 Feather, flex sensors, MPU6050 IMU, hand-soldered protoboard, DJI Tello</dd></div>
+        <div><dt>Hardware</dt><dd>Adafruit ESP32 Feather, four flex sensors, MPU6050 IMU, hand-soldered protoboard, DJI Tello</dd></div>
         <div><dt>Interfaces</dt><dd>ADC for the flex sensors, I2C for the IMU, Wi-Fi to the drone, USB serial to a computer</dd></div>
         <div><dt>Software</dt><dd>Arduino C++, Python, djitellopy, OpenCV, MediaPipe</dd></div>
       </dl>
       <div class="story">
-        <p>A glove that flies a drone and takes pictures with hand movements. Flex sensors sewn along the fingers measure how far each one bends, and an IMU on the wrist measures roll and pitch. Firmware on an ESP32 turns combinations of those into flight and camera commands and sends them to the drone over Wi-Fi.</p>
-        <p>A switch on the glove moves it into computer mode. There, glove data streams over USB serial to a Python program that flies the drone and shows its live camera feed. MediaPipe tracks my other hand in the video, and an open left palm triggers a flip that overrides the glove.</p>
+        <p>A glove that flies a camera drone with hand movements. Four flex sensors sewn along the fingers measure how far each one bends, read through the ESP32's ADC, and an IMU on the wrist measures roll and pitch. Firmware on the ESP32 turns the hand shape and wrist tilt into flight commands and sends them to the drone over Wi-Fi.</p>
+        <p>A switch on the glove moves it into computer mode. There, glove data streams over USB serial to a Python program that flies the drone and shows its live camera feed, processed with OpenCV. MediaPipe tracks my other hand in the video, and an open left palm triggers a flip that overrides the glove.</p>
         <div class="glove-media">
           <figure class="glove-flight">
             <video src="media/glove-flight.mp4" poster="media/glove-flight.jpg" width="960" height="686" muted loop playsinline autoplay controls preload="metadata" aria-label="Nancy standing still and steering a small drone through the air with hand movements, then landing it."></video>
             <figcaption>The full flight with the glove: takeoff, flying left and right, turning in place, holding position, and landing. Shown at 1.75× speed.</figcaption>
           </figure>
           <figure>
-            <img src="media/glove-photo.jpg" alt="The glove from the back: flex sensors stitched along three fingers, wired to a protoboard with an ESP32 Feather and an MPU6050 breakout at the wrist." width="613" height="1000" loading="lazy">
-            <figcaption>The glove: flex sensors stitched along the fingers, an ESP32 Feather on a hand-soldered protoboard, and the MPU6050 at the wrist.</figcaption>
+            <img src="media/glove-photo.jpg" alt="The glove from the back: flex sensors stitched along four fingers, wired to a protoboard with an ESP32 Feather and an MPU6050 breakout at the wrist." width="613" height="1000" loading="lazy">
+            <figcaption>The glove: four flex sensors stitched along the fingers, an ESP32 Feather on a hand-soldered protoboard, and the MPU6050 at the wrist.</figcaption>
           </figure>
           <figure>
             <video src="media/glove-sensors.mp4" poster="media/glove-sensors.jpg" width="720" height="1000" muted loop playsinline autoplay controls preload="metadata" aria-label="Glove sensor readings plotted live on a monitor, with each curve dipping as a finger bends."></video>
@@ -306,6 +311,17 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
           </figure>
         </div>
 
+        <h3>Gestures</h3>
+        <table class="gestures">
+          <thead><tr><th>Hand</th><th>Wrist</th><th>Drone</th></tr></thead>
+          <tbody>
+            <tr><td>Open palm</td><td>Any, on the ground</td><td>Calibrates the IMU, then takes off</td></tr>
+            <tr><td>Open palm</td><td>Tilt forward / back<br>Tilt left / right</td><td>Climbs / descends<br>Turns left / right</td></tr>
+            <tr><td>Thumbs-up</td><td>Tilt forward / back<br>Tilt left / right</td><td>Flies forward / back<br>Flies left / right</td></tr>
+            <tr><td>Peace sign</td><td>Any</td><td>Lands</td></tr>
+            <tr><td>Any</td><td>Level (under 35°)</td><td>Holds position</td></tr>
+          </tbody>
+        </table>
         <h3>What I built</h3>
         <ul class="decisions">
           <li>Soldered and debugged the protoboard on the back of the glove that ties the sensors to the ESP32.</li>
