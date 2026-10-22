@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>html{-webkit-text-size-adjust:100%} body{margin:0} img,video{max-width:100%} [hidden]{display:none!important}</style>
+<meta name="description" content="Nancy Zou, Stanford electrical engineering: sensor PCBs, a structural flight controller, a gesture-controlled drone, and bare-metal RISC-V projects.">
+<title>Nancy Zou Projects</title>
+<style>
+@font-face { font-family: "Archivo"; src: url("fonts/archivo-var.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; font-display: swap; }
+@font-face { font-family: "Public Sans"; src: url("fonts/public-sans-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Public Sans"; src: url("fonts/public-sans-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Public Sans"; src: url("fonts/public-sans-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("fonts/jetbrains-mono-400.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("fonts/jetbrains-mono-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+</style>
+<style>
+/* Layout: an engineering portfolio set like a stack of datasheets — each project has a spec column (role, parts, interfaces) beside its story and board images. */
+:root {
+  --bg: #F2F4F6;
+  --panel: #FFFFFF;
+  --ink: #16202A;
+  --muted: #586470;
+  --rule: #D3DAE1;
+  --accent: #A9501E;      /* copper */
+  --accent-soft: #F3E3D8;
+  --ok: #2F6B4F;
+  --ok-soft: #DDEDE4;
+  --wip: #7A5A0E;
+  --wip-soft: #F4EACB;
+  --code-bg: #F7F8FA;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Public Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E141A; --panel: #141C24; --ink: #E5EAF0; --muted: #98A5B2; --rule: #26313C;
+    --accent: #E0894E; --accent-soft: #3A2517; --ok: #7CC4A0; --ok-soft: #173126; --wip: #E2C26A; --wip-soft: #352B12; --code-bg: #10171E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E141A; --panel: #141C24; --ink: #E5EAF0; --muted: #98A5B2; --rule: #26313C;
+  --accent: #E0894E; --accent-soft: #3A2517; --ok: #7CC4A0; --ok-soft: #173126; --wip: #E2C26A; --wip-soft: #352B12; --code-bg: #10171E;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-block: 48px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 56px;
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+p { margin: 0; }
+
+/* Header */
+.intro { display: grid; gap: 20px; }
+.eyebrow {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+.intro h1 {
+  font-size: clamp(44px, 9vw, 92px);
+  font-weight: 800;
+  font-stretch: 125%;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.intro h1 span { color: var(--accent); }
+.lede { font-size: clamp(18px, 2.2vw, 21px); max-width: 60ch; color: var(--ink); }
+.contact { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; font-family: var(--font-mono); font-size: 14px; }
+.contact code { font-family: inherit; user-select: all; }
+.copy {
+  font: inherit; font-size: 12px; padding: 4px 10px; border: 1px solid var(--rule); background: var(--panel); color: var(--ink);
+  border-radius: 999px; cursor: pointer;
+}
+.copy:hover { border-color: var(--accent); }
+
+/* Index */
+.index { border-top: 2px solid var(--ink); }
+.index ol { list-style: none; margin: 0; padding: 0; }
+.index li { border-bottom: 1px solid var(--rule); }
+.index a {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: baseline;
+  padding: 14px 0; text-decoration: none; color: var(--ink);
+}
+.index a:hover .idx-title { color: var(--accent); }
+.idx-title { font-family: var(--font-display); font-stretch: 112%; font-weight: 700; font-size: 20px; }
+.idx-meta { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.idx-sum { grid-column: 1 / -1; color: var(--muted); font-size: 15px; }
+
+/* Project */
+.project { display: grid; gap: 24px; scroll-margin-top: 24px; }
+.proj-head { display: grid; gap: 10px; border-top: 2px solid var(--ink); padding-top: 18px; }
+.proj-head h2 { font-size: clamp(28px, 4.4vw, 40px); font-weight: 700; font-stretch: 112%; line-height: 1.05; }
+.proj-sub { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; color: var(--muted); font-size: 15px; }
+.chip {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; padding: 2px 10px; border-radius: 999px; font-weight: 600;
+}
+.chip.built { background: var(--ok-soft); color: var(--ok); }
+.chip.wip { background: var(--wip-soft); color: var(--wip); }
+
+.proj-body { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 32px; align-items: start; }
+@media (max-width: 760px) { .proj-body { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
+
+.spec { margin: 0; display: grid; gap: 0; border: 1px solid var(--rule); background: var(--panel); }
+.spec div { padding: 10px 14px; border-bottom: 1px solid var(--rule); display: grid; gap: 2px; }
+.spec div:last-child { border-bottom: 0; }
+.spec dt { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.spec dd { margin: 0; font-size: 14.5px; line-height: 1.45; }
+
+.story { display: grid; gap: 18px; min-width: 0; }
+.story p { max-width: 66ch; }
+.story h3 { font-size: 13px; font-family: var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.decisions { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; max-width: 66ch; }
+.decisions li { padding-left: 18px; position: relative; }
+.decisions li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+
+.figs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 640px) { .figs { grid-template-columns: minmax(0, 1fr); } }
+figure { margin: 0; display: grid; gap: 8px; }
+figure img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); background: #0B1621; }
+figcaption { font-size: 13px; color: var(--muted); line-height: 1.45; }
+
+/* Glove media */
+.glove-media { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.glove-media .glove-flight { grid-column: 1 / -1; }
+@media (max-width: 640px) { .glove-media { grid-template-columns: minmax(0, 1fr); } }
+.glove-media video, .glove-media img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); background: #000; }
+.glove-media figure:not(.glove-flight) video, .glove-media figure:not(.glove-flight) img { max-height: 520px; object-fit: contain; }
+
+/* Demo videos */
+.demo-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+@media (max-width: 640px) { .demo-grid { grid-template-columns: minmax(0, 1fr); } }
+.demo-grid video { width: 100%; height: auto; display: block; border: 1px solid var(--rule); background: #000; max-height: 560px; object-fit: contain; }
+
+/* Sprites */
+.sprites { gap: 10px; }
+.sprite-row { display: flex; flex-wrap: wrap; gap: 12px; padding: 18px; background: #56638F; border: 1px solid var(--rule); align-items: flex-end; }
+.sprite { display: grid; gap: 6px; justify-items: center; }
+.sprite canvas { image-rendering: pixelated; display: block; }
+.sprite span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #E4E8F2; }
+
+/* Code */
+.code-block { border: 1px solid var(--rule); background: var(--code-bg); min-width: 0; }
+.code-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 8px 14px; border-bottom: 1px solid var(--rule); }
+.code-block pre { margin: 0; padding: 14px; overflow-x: auto; font-family: var(--font-mono); font-size: 13px; line-height: 1.55; color: var(--ink); tab-size: 4; }
+.code-block .c { color: var(--muted); font-style: italic; }
+
+/* Earlier work */
+.earlier { display: grid; gap: 18px; }
+.earlier > h2 { font-size: clamp(24px, 3.4vw, 30px); font-weight: 700; font-stretch: 112%; border-top: 2px solid var(--ink); padding-top: 18px; }
+.earlier-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 700px) { .earlier-grid { grid-template-columns: minmax(0, 1fr); } }
+.earlier-item { background: var(--panel); border: 1px solid var(--rule); padding: 18px 20px; display: grid; gap: 8px; align-content: start; }
+.earlier-item h3 { font-size: 18px; font-stretch: 112%; font-weight: 700; }
+.earlier-item .idx-meta { font-size: 12px; }
+.earlier-item p { font-size: 15px; color: var(--ink); }
+
+/* Toolbox */
+.toolbox { display: grid; gap: 14px; border-top: 2px solid var(--ink); padding-top: 18px; }
+.toolbox h2 { font-size: clamp(24px, 3.4vw, 30px); font-weight: 700; font-stretch: 112%; }
+.tool-rows { display: grid; gap: 0; }
+.tool-row { display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr); gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+@media (max-width: 560px) { .tool-row { grid-template-columns: minmax(0, 1fr); gap: 4px; } }
+.tool-row dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+.tool-row dd { margin: 0; }
+
+footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .index a, .copy { transition: color 0.15s ease, border-color 0.15s ease; }
+}
+</style>
+
+</head>
+<body>
+<main class="wrap">
+
+  <header class="intro">
+    <div class="eyebrow">Electrical Engineering · Stanford University · Class of 2029</div>
+    <h1>Nancy Zou<span>.</span></h1>
+    <p class="lede">I design small circuit boards and write the low-level code that runs on them. Most of my work sits where sensors, firmware, and flying hardware meet.</p>
+    <div class="contact">
+      <span><code id="email">nzou@stanford.edu</code></span>
+      <button class="copy" id="copy-email" type="button">Copy email</button>
+      <a href="https://www.linkedin.com/in/nancy-zou/">LinkedIn</a>
+    </div>
+  </header>
+
+  <nav class="index" aria-label="Projects">
+    <ol>
+      <li><a href="#dropsense"><span class="idx-title">Capacitive sensor boards</span><span class="idx-meta">DropSense · 2026</span><span class="idx-sum">A 1.1 × 0.5 in readout board and probe for a water-quality sensor startup.</span></a></li>
+      <li><a href="#flight-controller"><span class="idx-title">Flight controller that is also the frame</span><span class="idx-meta">Stanford UAV · 2026</span><span class="idx-sum">Leading a team designing a micro drone around one structural PCB.</span></a></li>
+      <li><a href="#glove"><span class="idx-title">Gesture-controlled drone camera</span><span class="idx-meta">Independent · 2026</span><span class="idx-sum">A sensor glove that flies a drone, plus a computer-vision mode.</span></a></li>
+      <li><a href="#bare-metal"><span class="idx-title">Bare-metal RISC-V system</span><span class="idx-meta">CS107E · 2026</span><span class="idx-sum">Drivers, a memory allocator, and an interrupt-driven console with no operating system.</span></a></li>
+      <li><a href="#mango-run"><span class="idx-title">Mango Run</span><span class="idx-meta">CS107E final project · 2026</span><span class="idx-sum">A side-scrolling game on the Mango Pi that you play by physically jumping, read through an accelerometer.</span></a></li>
+    </ol>
+  </nav>
+
+  <!-- DropSense -->
+  <article class="project" id="dropsense">
+    <div class="proj-head">
+      <div class="eyebrow">DropSense, a spinout from the Tarpeh Lab at Stanford</div>
+      <h2>Capacitive sensor boards</h2>
+      <div class="proj-sub"><span class="chip built">Built</span><span>Electrical Engineering Intern · Spring 2026 – present</span></div>
+    </div>
+    <div class="proj-body">
+      <dl class="spec">
+        <div><dt>Role</dt><dd>Schematic, layout, assembly</dd></div>
+        <div><dt>Boards</dt><dd>Readout board, 1.1 × 0.5 in<br>Two-electrode probe, 60.5 × 23 mm</dd></div>
+        <div><dt>Sensing</dt><dd>LC tank per channel, capacitance-to-digital converter, crystal oscillator reference</dd></div>
+        <div><dt>Interface</dt><dd>I2C to a microcontroller over a 4-pin header (3.3 V, GND, SDA, SCL)</dd></div>
+        <div><dt>Tools</dt><dd>KiCad, OnShape, 3D printing, soldering</dd></div>
+      </dl>
+      <div class="story">
+        <p>DropSense is building a small, low-cost sensor for nitrogen in wastewater. I designed the electronics that turn the sensor's capacitance into a number a microcontroller can read.</p>
+        <p>The probe's two electrodes form part of an LC tank. When the capacitance around the probe changes, the tank's resonant frequency shifts. A capacitance-to-digital converter counts that frequency against an external crystal oscillator and holds the result for the microcontroller to read over I2C.</p>
+        <h3>Design decisions</h3>
+        <ul class="decisions">
+          <li>Kept sensor traces short and clear of ground copper, since every bit of stray capacitance shows up as offset and noise.</li>
+          <li>Placed the oscillator right next to the converter so the clock trace stays short and away from the sensor inputs.</li>
+          <li>Put decoupling capacitors at each chip's supply pin.</li>
+          <li>Designed a spring-loaded pogo-pin interface and a 3D-printed alignment fixture, so disposable sensor strips swap in seconds without soldering.</li>
+          <li>Separately, designed and 3D-printed several iterations of a compact chamber that shrinks the lab's electrochemical ammonium sensor into a portable form.</li>
+        </ul>
+        <div class="figs">
+          <figure>
+            <img src="img/readout-board.png" alt="KiCad layout of the readout board: converter chip in the center, 4-pin header and oscillator on the left, two LC tank channels on the right." width="1618" height="1186" loading="lazy">
+            <figcaption>Readout board layout. Header and oscillator on the left, converter in the middle, the two LC channels (CH0, CH1) on the right.</figcaption>
+          </figure>
+          <figure>
+            <img src="img/probe-board.png" alt="KiCad layout of the probe: a U-shaped outer electrode surrounding a center electrode, with the sample chamber boundary marked." width="1096" height="488" loading="lazy">
+            <figcaption>Probe layout. An outer ring electrode wraps the center electrode inside the marked chamber boundary.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Skyrunners -->
+  <article class="project" id="flight-controller">
+    <div class="proj-head">
+      <div class="eyebrow">Stanford UAV · Skyrunners</div>
+      <h2>Flight controller that is also the frame</h2>
+      <div class="proj-sub"><span class="chip wip">In design</span><span>Technical Lead · Oct 2026 – present (Systems Engineer since Sep 2025)</span></div>
+    </div>
+    <div class="proj-body">
+      <dl class="spec">
+        <div><dt>Role</dt><dd>Technical lead for the team</dd></div>
+        <div><dt>Board</dt><dd>Flight controller PCB shaped as the drone's frame, motor mounts in its arms</dd></div>
+        <div><dt>Planned parts</dt><dd>ESP32-S3, IMU, MOSFET drivers for four brushed motors, 1S LiPo</dd></div>
+        <div><dt>Tools</dt><dd>KiCad</dd></div>
+      </dl>
+      <div class="story">
+        <p>I lead a team building a micro drone where the custom flight controller PCB is also the structure. The motors mount directly into the board's arms, so there is no separate frame to build or carry.</p>
+        <p>Because the board is the airframe, the electrical and mechanical decisions are tied together: where the IMU sits relative to the spinning motors, how motor current shares the battery with the logic, and how stiff the board needs to be to keep vibration out of the sensor readings.</p>
+        <h3>Before this</h3>
+        <p>As a systems engineer on the team's fixed-wing autonomous aircraft, I designed and tested fuselage and structural components, and planned the payload layout and vibration-isolating sensor mounts from center-of-gravity analysis.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- Glove -->
+  <article class="project" id="glove">
+    <div class="proj-head">
+      <div class="eyebrow">Independent project</div>
+      <h2>Gesture-controlled drone camera</h2>
+      <div class="proj-sub"><span class="chip built">Flying</span><span>Summer 2026 – present</span></div>
+    </div>
+    <div class="proj-body">
+      <dl class="spec">
+        <div><dt>Hardware</dt><dd>Adafruit ESP32 Feather, flex sensors, MPU6050 IMU, hand-soldered protoboard, DJI Tello</dd></div>
+        <div><dt>Interfaces</dt><dd>ADC for the flex sensors, I2C for the IMU, Wi-Fi to the drone, USB serial to a computer</dd></div>
+        <div><dt>Software</dt><dd>Arduino C++, Python, djitellopy, OpenCV, MediaPipe</dd></div>
+      </dl>
+      <div class="story">
+        <p>A glove that flies a drone and takes pictures with hand movements. Flex sensors sewn along the fingers measure how far each one bends, and an IMU on the wrist measures roll and pitch. Firmware on an ESP32 turns combinations of those into flight and camera commands and sends them to the drone over Wi-Fi.</p>
+        <p>A switch on the glove moves it into computer mode. There, glove data streams over USB serial to a Python program that flies the drone and shows its live camera feed. MediaPipe tracks my other hand in the video, and an open left palm triggers a flip that overrides the glove.</p>
+        <div class="glove-media">
+          <figure class="glove-flight">
+            <video src="media/glove-flight.mp4" poster="media/glove-flight.jpg" width="960" height="686" muted loop playsinline autoplay controls preload="metadata" aria-label="Nancy standing still and steering a small drone through the air with hand movements, then landing it."></video>
+            <figcaption>The full flight with the glove: takeoff, flying left and right, turning in place, holding position, and landing. Shown at 1.75× speed.</figcaption>
+          </figure>
+          <figure>
+            <img src="media/glove-photo.jpg" alt="The glove from the back: flex sensors stitched along three fingers, wired to a protoboard with an ESP32 Feather and an MPU6050 breakout at the wrist." width="613" height="1000" loading="lazy">
+            <figcaption>The glove: flex sensors stitched along the fingers, an ESP32 Feather on a hand-soldered protoboard, and the MPU6050 at the wrist.</figcaption>
+          </figure>
+          <figure>
+            <video src="media/glove-sensors.mp4" poster="media/glove-sensors.jpg" width="720" height="1000" muted loop playsinline autoplay controls preload="metadata" aria-label="Glove sensor readings plotted live on a monitor, with each curve dipping as a finger bends."></video>
+            <figcaption>Live sensor readings while testing: the flex-sensor curves dip as each finger bends, then the bottom two lines spike as the wrist tilts and the IMU responds.</figcaption>
+          </figure>
+        </div>
+
+        <h3>What I built</h3>
+        <ul class="decisions">
+          <li>Soldered and debugged the protoboard on the back of the glove that ties the sensors to the ESP32.</li>
+          <li>Wrote the firmware that reads the sensors and maps gestures to commands.</li>
+          <li>Wrote the Python control program and the computer-vision gesture override.</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <!-- CS107E -->
+  <article class="project" id="bare-metal">
+    <div class="proj-head">
+      <div class="eyebrow">CS107E · Computer Systems from the Ground Up · Coursework</div>
+      <h2>Bare-metal RISC-V system</h2>
+      <div class="proj-sub"><span class="chip built">Complete</span><span>Spring 2026</span></div>
+    </div>
+    <div class="proj-body">
+      <dl class="spec">
+        <div><dt>Board</dt><dd>Mango Pi MQ-Pro (Allwinner D1-H, RISC-V)</dd></div>
+        <div><dt>Languages</dt><dd>RISC-V assembly, C</dd></div>
+        <div><dt>Runs on</dt><dd>No operating system</dd></div>
+      </dl>
+      <div class="story">
+        <p>Over one quarter I built up a working computer system from nothing but the hardware: first blinking LEDs from assembly, and by the end a keyboard-driven shell with a graphics console, all running without an operating system.</p>
+        <ul class="decisions">
+          <li>Drove GPIO through memory-mapped registers in RISC-V assembly, starting with a Larson scanner.</li>
+          <li>Built a heap allocator with 8-byte-aligned blocks and guard-byte red zones that catch buffer overflows, plus a frame-pointer stack backtrace for debugging crashes.</li>
+          <li>Wrote a PS/2 keyboard driver that decodes raw scancodes, including make/break codes and modifier keys.</li>
+          <li>Built a shell with line editing and a framebuffer graphics console, then tied everything into one interrupt-driven system with a ring buffer so no keystrokes are dropped.</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <!-- Mango Run -->
+  <article class="project" id="mango-run">
+    <div class="proj-head">
+      <div class="eyebrow">CS107E final project · Mango Pi, no operating system</div>
+      <h2>Mango Run</h2>
+      <div class="proj-sub"><span class="chip built">Playable</span><span>Spring 2026</span></div>
+    </div>
+    <div class="proj-body">
+      <dl class="spec">
+        <div><dt>Board</dt><dd>Mango Pi MQ-Pro (RISC-V)</dd></div>
+        <div><dt>Input</dt><dd>MPU-6050 accelerometer over bit-banged I2C at 400 kHz, read every frame</dd></div>
+        <div><dt>Display</dt><dd>640 × 480 double-buffered framebuffer over HDMI</dd></div>
+        <div><dt>Built on</dt><dd>My own graphics and framebuffer libraries from the course</dd></div>
+        <div><dt>Language</dt><dd>C</dd></div>
+      </dl>
+      <div class="story">
+        <p>A pixel-art runner inspired by the offline dinosaur game, built on the graphics library I wrote during CS107E. You play it with your body instead of a keyboard. An accelerometer reads your motion: a real jump makes the runner jump over a cactus. Mangos float overhead as collectibles, the high score carries across rounds, and hitting a cactus brings up a game-over screen that holds for five seconds before the next round starts.</p>
+
+        <div class="demo-grid">
+          <figure>
+            <video src="media/mango-run-player.mp4" poster="media/mango-run-player.jpg" width="720" height="1054" muted loop playsinline autoplay controls preload="metadata" aria-label="Nancy holding the accelerometer controller and jumping in front of the monitor while the game runs."></video>
+            <figcaption>Playing it: jump in real life to clear a cactus on screen. The accelerometer is in the purple controller.</figcaption>
+          </figure>
+          <figure>
+            <video src="media/mango-run-screen.mp4" poster="media/mango-run-screen.jpg" width="720" height="626" muted loop playsinline autoplay controls preload="metadata" aria-label="Close-up of the monitor: the runner moves along the ground line as cacti and mangos scroll in, with the score counting up in the corner."></video>
+            <figcaption>On screen: the runner, cacti, and mangos scroll by as the score climbs past the high score.</figcaption>
+          </figure>
+        </div>
+
+        <figure class="sprites">
+          <div class="sprite-row" id="sprite-row" role="img" aria-label="The game's three sprites drawn from their pixel maps: the runner, a green cactus, and an orange mango with a leaf."></div>
+          <figcaption>The sprites, drawn on this page straight from the pixel maps and palettes in game.c. In the game each cell is a 4 × 4 block.</figcaption>
+        </figure>
+
+        <h3>How it works</h3>
+        <ul class="decisions">
+          <li>Sprites are small palette-indexed maps (8 × 8 for the runner, 7 × 10 for a cactus) drawn as scaled rectangles, with index 0 left transparent.</li>
+          <li>Each frame reads the accelerometer, applies gravity and the jump velocity, scrolls and spawns obstacles from fixed-size pools, redraws into the back buffer, and swaps it to the screen. A timer holds every frame to the same length.</li>
+          <li>Collision detection reads pixels out of the framebuffer: for each solid pixel of the runner, it checks the pixel one step ahead for cactus green.</li>
+          <li>A detected jump is latched until the runner lands, so one real jump produces exactly one jump on screen.</li>
+        </ul>
+
+        <h3>Debugging it</h3>
+        <p>Most of the work was bringing it up on bare metal, where a crash just leaves the board blinking. I traced faults with UART prints between each step. That turned up peripherals set up in the wrong order, a collision check reading the wrong buffer after a swap, and a loop that was quietly clearing cactus slots so only two ever appeared.</p>
+
+        <div class="code-block">
+          <div class="code-label">game.c · moving and spawning obstacles</div>
+<pre><code><span class="c">// advances all obstacles, removes ones that go off screen, and spawns
+// new cacti and mangos at their respective rates</span>
+static void update_world() {
+    for (int i = 0; i &lt; MAX_CACTI; i++) {          <span class="c">// move cacti</span>
+        if (!cacti[i].on_screen) continue;
+        cacti[i].x -= world_speed;
+        if (cacti[i].x &lt; CACTUS_W * -1) {           <span class="c">// off screen</span>
+            cacti[i].on_screen = false;
+        }
+    }
+    for (int i = 0; i &lt; MAX_MANGOS; i++) {         <span class="c">// move mangos</span>
+        if (!mangos[i].on_screen) continue;
+        mangos[i].x -= world_speed;
+        if (mangos[i].x &lt; MANGO_W * -1) {
+            mangos[i].on_screen = false;
+        }
+    }
+    if (frame_counter % CACTI_RATE == 0) {         <span class="c">// spawn a cactus into a free slot</span>
+        for (int i = 0; i &lt; MAX_CACTI; i++) {
+            if (!cacti[i].on_screen) {
+                cacti[i].x = SCREEN_W;
+                cacti[i].on_screen = true;
+                break;
+            }
+        }
+    }
+    if (frame_counter % MANGO_RATE == 0) {         <span class="c">// spawn a mango into a free slot</span>
+        for (int i = 0; i &lt; MAX_MANGOS; i++) {
+            if (!mangos[i].on_screen) {
+                mangos[i].x = SCREEN_W;
+                mangos[i].on_screen = true;
+                break;
+            }
+        }
+    }
+}</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-label">game.c · drawing a sprite from its map</div>
+<pre><code><span class="c">// draws a sprite with a scale at px, py by iterating over a sprite map
+// and drawing the colors in the corresponding palette</span>
+static void draw_sprite(int px, int py, const unsigned char *sprite,
+                        int rows, int cols, const color_t *palette) {
+    for (int r = 0; r &lt; rows; r++) {
+        for (int c = 0; c &lt; cols; c++) {
+            unsigned char index = sprite[r * cols + c];
+            if (index != 0) {
+                gl_draw_rect(px + c * SCALE, py + r * SCALE,
+                             SCALE, SCALE, palette[index]);
+            }
+        }
+    }
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Earlier -->
+  <section class="earlier" aria-labelledby="earlier-h">
+    <h2 id="earlier-h">Earlier work</h2>
+    <div class="earlier-grid">
+      <div class="earlier-item">
+        <div class="idx-meta">University of Washington · 2022 – 2025</div>
+        <h3>Metamaterial and photonics research</h3>
+        <p>Research assistant to Prof. Wei-Chih Wang. Simulated fishnet metamaterial structures in CST Studio, analyzing field distributions near resonance to find geometries with a negative refractive index. Built a fiber-optic Fabry–Pérot interferometer with a piezoelectric actuator and measured it with photodetectors and an oscilloscope.</p>
+      </div>
+      <div class="earlier-item">
+        <div class="idx-meta">MIT THINK finalist · 2023 – present</div>
+        <h3>Low-cost ballistic backpack insert</h3>
+        <p>Selected as an MIT THINK finalist (top &lt;1%) and awarded $1,000. Designed an insert that uses its geometry, rather than layered composites, to dissipate impact energy. Live-fire tested prototypes with a local police department and used the failures to refine the design; now working with a manufacturer toward production.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toolbox -->
+  <section class="toolbox" aria-labelledby="tools-h">
+    <h2 id="tools-h">Toolbox</h2>
+    <dl class="tool-rows">
+      <div class="tool-row"><dt>Hardware</dt><dd>Schematic capture and PCB layout in KiCad, soldering and board assembly, oscilloscope, multimeter, logic analyzer</dd></div>
+      <div class="tool-row"><dt>Embedded</dt><dd>C, C++, RISC-V assembly, bare-metal C, ESP32, Arduino, I2C, UART, ADC, GPIO, interrupts</dd></div>
+      <div class="tool-row"><dt>Software</dt><dd>Python, OpenCV, MediaPipe, MATLAB</dd></div>
+      <div class="tool-row"><dt>Mechanical</dt><dd>OnShape, Fusion 360, SolidWorks, 3D printing</dd></div>
+      <div class="tool-row"><dt>Coursework</dt><dd>Embedded Systems (EE 186), Computer Systems (CS107E), Signals and Systems (EE 102A), Robot Autonomy (EE 160A)</dd></div>
+    </dl>
+  </section>
+
+  <footer>Nancy Zou · nzou@stanford.edu</footer>
+</main>
+
+<script>
+(function () {
+  var btn = document.getElementById('copy-email');
+  var email = document.getElementById('email');
+  btn.addEventListener('click', function () {
+    var text = email.textContent;
+    function selectIt() {
+      var r = document.createRange(); r.selectNodeContents(email);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = 'Selected';
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () { btn.textContent = 'Copied'; }, selectIt);
+    } catch (e) { selectIt(); }
+    setTimeout(function () { btn.textContent = 'Copy email'; }, 2000);
+  });
+})();
+</script>
+<script>
+(function () {
+  // Pixel maps and palettes copied from game.c (index 0 = transparent).
+  var C = { skin:'#ffccbc', shirt:'#f44336', pants:'#37474f', green:'#4caf50', mango:'#ff9800', leaf:'#2e7d32' };
+  var sprites = [
+    { name:'Runner', pal:[null,C.skin,C.shirt,C.pants], map:[
+      [0,0,1,1,1,1,0,0],[0,1,1,1,1,1,1,0],[0,0,1,0,0,1,0,0],[0,2,2,2,2,2,2,0],
+      [2,2,2,2,2,2,2,2],[0,0,3,3,3,3,0,0],[0,3,0,0,0,0,3,0],[3,0,0,0,0,0,0,3]] },
+    { name:'Cactus', pal:[null,C.green], map:[
+      [0,0,1,1,1,0,0],[0,0,1,1,1,0,0],[1,0,1,1,1,0,1],[1,1,1,1,1,1,1],[0,1,1,1,1,1,0],
+      [0,0,1,1,1,0,0],[0,0,1,1,1,0,0],[0,0,1,1,1,0,0],[0,0,1,1,1,0,0],[0,0,1,1,1,0,0]] },
+    { name:'Mango', pal:[null,C.mango,C.leaf], map:[
+      [0,0,0,2,0,0,0],[0,0,2,2,2,0,0],[0,1,1,1,1,1,0],[1,1,1,1,1,1,1],
+      [1,1,1,1,1,1,1],[0,1,1,1,1,1,0],[0,0,1,1,1,0,0]] }
+  ];
+  var S = 7, row = document.getElementById('sprite-row');
+  if (!row) return;
+  sprites.forEach(function (sp) {
+    var cv = document.createElement('canvas');
+    cv.width = sp.map[0].length * S; cv.height = sp.map.length * S;
+    var g = cv.getContext('2d');
+    sp.map.forEach(function (r, y) { r.forEach(function (v, x) {
+      if (v) { g.fillStyle = sp.pal[v]; g.fillRect(x * S, y * S, S, S); }
+    }); });
+    var wrap = document.createElement('div'); wrap.className = 'sprite';
+    var label = document.createElement('span'); label.textContent = sp.name;
+    wrap.appendChild(cv); wrap.appendChild(label); row.appendChild(wrap);
+  });
+})();
+</script>
+
+<script>
+(function () {
+  try {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('video').forEach(function (v) { v.removeAttribute('autoplay'); v.pause(); });
+    }
+  } catch (e) {}
+})();
+</script>
+
+</body>
+</html>
