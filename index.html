@@ -235,7 +235,7 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
         <div><dt>Tools</dt><dd>KiCad, OnShape, 3D printing, soldering</dd></div>
       </dl>
       <div class="story">
-        <p>DropSense, a spinout from Stanford's Tarpeh Lab, is building a small, low-cost sensor for nitrogen in wastewater. I designed the electronics that turn the sensor's capacitance into a number a microcontroller can read.</p>
+        <p>DropSense, a spinout from Stanford's Tarpeh Lab, is building a small, low-cost sensor for nitrogen in wastewater. I designed the electronics that turn the sensor's capacitance into a number a microcontroller can read, and I'm now designing the board's pH sensing.</p>
         <p>The probe's two electrodes form part of an LC tank. When the capacitance around the probe changes, the tank's resonant frequency shifts. A capacitance-to-digital converter counts that frequency against an external crystal oscillator and holds the result for the microcontroller to read over I2C.</p>
         <h3>Design decisions</h3>
         <ul class="decisions">
@@ -255,6 +255,14 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
             <figcaption>Probe layout. An outer ring electrode wraps the center electrode inside the marked chamber boundary.</figcaption>
           </figure>
         </div>
+        <h3>Now designing: isolated pH sensing</h3>
+        <p>The next step is measuring pH in the reactor's anode chamber, where the wastewater sample sits. As the reactor runs, the anode makes acid, and protons start competing with ammonium to carry current across the membrane. Tracking pH lets the team estimate how much ammonium is actually being transported.</p>
+        <ul class="decisions">
+          <li>The anode-chamber liquid floats near +20 V relative to the controller's ground, so a pH sensor's reference electrode tied to that ground would leak reactor current, damage the reference, and corrupt the current measurement.</li>
+          <li>The fix is an isolated sensor island: an isolated DC-DC converter (TI UCC12050) for power, an isolated I2C link (TI ISO1540) for data, and a local ADC, with the island's ground set by the reference electrode.</li>
+          <li>The sensor sits in a flow-through side chamber on the recirculation loop, away from the electrodes, bubbles, and voltage gradients in the main cell.</li>
+          <li>Currently comparing an ISFET with a micro glass electrode for a long-running deployment at a wastewater plant.</li>
+        </ul>
       </div>
     </div>
   </article>
