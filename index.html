@@ -212,6 +212,7 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
   <nav class="index" aria-label="Projects">
     <ol>
       <li><a href="#dropsense"><span class="idx-title">Capacitive sensor boards</span><span class="idx-meta">DropSense · 2026</span><span class="idx-sum">A 1.1 × 0.5 in readout board and probe for DropSense, a spinout from Stanford's Tarpeh Lab, and now an isolated pH sensing front end.</span></a></li>
+      <li><a href="#sky3"><span class="idx-title">Electrical systems for a VTOL drone</span><span class="idx-meta">Stanford UAV club · 2026</span><span class="idx-sum">Leading the electrical sector of the club's fixed-wing VTOL: propulsion, power and redundancy, and avionics.</span></a></li>
       <li><a href="#flight-controller"><span class="idx-title">Custom flight controller for a microdrone</span><span class="idx-meta">Stanford UAV club · 2026</span><span class="idx-sum">Leading a team in Stanford's UAV club designing a flight controller PCB that doubles as the drone's frame.</span></a></li>
       <li><a href="#glove"><span class="idx-title">Gesture-controlled drone camera</span><span class="idx-meta">Independent · 2026</span><span class="idx-sum">A sensor glove that flies a drone, plus a computer-vision mode.</span></a></li>
       <li><a href="#bare-metal"><span class="idx-title">Bare-metal RISC-V system</span><span class="idx-meta">CS107E · 2026</span><span class="idx-sum">Drivers, a memory allocator, and an interrupt-driven console with no operating system.</span></a></li>
@@ -263,6 +264,35 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
           <li>The sensor sits in a flow-through side chamber on the recirculation loop, away from the electrodes, bubbles, and voltage gradients in the main cell.</li>
           <li>Currently comparing an ISFET with a micro glass electrode for a long-running deployment at a wastewater plant.</li>
         </ul>
+      </div>
+    </div>
+  </article>
+
+  <!-- Sky 3 VTOL -->
+  <article class="project" id="sky3">
+    <div class="proj-head">
+      <div class="eyebrow">Stanford UAV Club · Skyrunners · Sky 3</div>
+      <h2>Electrical systems for a fixed-wing VTOL drone</h2>
+      <div class="proj-sub"><span class="chip wip">Planning</span><span>Electrical Lead · Fall 2026 – present</span></div>
+    </div>
+    <div class="proj-body">
+      <dl class="spec">
+        <div><dt>Role</dt><dd>Electrical lead, overseeing three sub-teams</dd></div>
+        <div><dt>Aircraft</dt><dd>Fixed-wing VTOL: four lift motors plus a forward motor, tilt-rotor under study</dd></div>
+        <div><dt>Avionics</dt><dd>ArduPilot flight controller, RC and telemetry links, GPS and compass, airspeed sensor</dd></div>
+        <div><dt>Milestone</dt><dd>Phase 0 design freeze, March 5, 2027</dd></div>
+      </dl>
+      <div class="story">
+        <p>Sky 3 is the club's next aircraft: a fixed-wing drone that takes off and lands vertically on lift motors, then cruises on its wing. I lead its electrical sector, splitting the work into three sub-teams that each end the winter with hardware, test data, and a decision the rest of the team can build on.</p>
+        <p>I coordinate with the mechanical and software teams on airframe integration, the tilt-rotor design, and communications for flying several drones at once.</p>
+        <h3>The three sub-teams</h3>
+        <ul class="decisions">
+          <li><strong>Propulsion trade study.</strong> Size the lift and cruise motors, props, ESCs, and battery from the takeoff weight, aiming for about 2:1 thrust-to-weight in hover with margin for a motor failure, gusts, and battery sag. Test the top two options on a thrust stand and hand over an exact parts list.</li>
+          <li><strong>Power distribution, safety, and redundancy.</strong> Design the power system from one battery to every motor, servo, and the flight controller, with diode-OR backup power for the flight controller and a kill switch. Run all four lift motors on a rig for up to 20 hours with automatic over-temperature and over-current cut-off, and inject faults on purpose: a cut ESC, a brownout, a pulled connector.</li>
+          <li><strong>Avionics.</strong> Choose and lay out the flight controller, radios, GPS, and airspeed sensor, then install and ground-test them. Antennas stay out of carbon-fiber sections, which block radio, and the GPS and compass stay away from high-current wiring. Every output gets mapped and both radio links get range-tested.</li>
+        </ul>
+        <h3>Failsafes</h3>
+        <p>The power sub-team writes a failsafe table covering RC loss, telemetry loss, low battery, and GPS loss, each with an agreed response in both hover and cruise, then sets those failsafes on the flight controller before handing it to a pilot with a pre-flight checklist.</p>
       </div>
     </div>
   </article>
