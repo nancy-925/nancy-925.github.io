@@ -137,6 +137,11 @@ p { margin: 0; }
 
 .fc-fig { margin: 8px 0 4px; max-width: 520px; }
 .fc-fig img { width: 100%; height: auto; display: block; }
+.dh-media { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; align-items: start; }
+@media (max-width: 640px) { .dh-media { grid-template-columns: minmax(0, 1fr); } }
+.results { border-collapse: collapse; width: 100%; max-width: 66ch; font-size: 15px; }
+.results th, .results td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.results th { font-weight: 600; color: var(--muted); }
 .figs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 @media (max-width: 640px) { .figs { grid-template-columns: minmax(0, 1fr); } }
 figure { margin: 0; display: grid; gap: 8px; }
@@ -212,6 +217,7 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
   <nav class="index" aria-label="Projects">
     <ol>
       <li><a href="#dropsense"><span class="idx-title">Capacitive sensor boards</span><span class="idx-meta">DropSense · 2026</span><span class="idx-sum">A 1.1 × 0.5 in readout board and probe for DropSense, a spinout from Stanford's Tarpeh Lab, and now an isolated pH sensing front end.</span></a></li>
+      <li><a href="#dronehacks"><span class="idx-title">Radar timing for an autonomous drone</span><span class="idx-meta">Stanford DroneHacks · 2026</span><span class="idx-sum">Marked every radar frame start in hardware to within 12 µs and powered raw radar capture from the flight battery. 2nd, Most Technically Impressive.</span></a></li>
       <li><a href="#sky3"><span class="idx-title">Electrical systems for a VTOL drone</span><span class="idx-meta">Stanford UAV club · 2026</span><span class="idx-sum">Leading the electrical sector of the club's fixed-wing VTOL: propulsion, power and redundancy, and avionics.</span></a></li>
       <li><a href="#flight-controller"><span class="idx-title">Custom flight controller for a microdrone</span><span class="idx-meta">Stanford UAV club · 2026</span><span class="idx-sum">Leading a team in Stanford's UAV club designing a flight controller PCB that doubles as the drone's frame.</span></a></li>
       <li><a href="#glove"><span class="idx-title">Gesture-controlled drone camera</span><span class="idx-meta">Independent · 2026</span><span class="idx-sum">A sensor glove that flies a drone, plus a computer-vision mode.</span></a></li>
@@ -263,6 +269,51 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
           <li>The fix is an isolated sensor island: an isolated DC-DC converter (TI UCC12050) for power, an isolated I2C link (TI ISO1540) for data, and a local ADC, with the island's ground set by the reference electrode.</li>
           <li>The sensor sits in a flow-through side chamber on the recirculation loop, away from the electrodes, bubbles, and voltage gradients in the main cell.</li>
           <li>Currently comparing an ISFET with a micro glass electrode for a long-running deployment at a wastewater plant.</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <!-- DroneHacks -->
+  <article class="project" id="dronehacks">
+    <div class="proj-head">
+      <div class="eyebrow">Stanford DroneHacks 2026 · Team project</div>
+      <h2>Radar timing and power for an autonomous drone</h2>
+      <div class="proj-sub"><span class="chip built">2nd, Most Technically Impressive</span><span>November 2026</span></div>
+    </div>
+    <div class="proj-body">
+      <dl class="spec">
+        <div><dt>Role</dt><dd>Radar timing, firmware, data capture and power</dd></div>
+        <div><dt>Radar</dt><dd>TI IWR6843ISK mmWave radar, DCA1000 raw-data capture board</dd></div>
+        <div><dt>Computers</dt><dd>Raspberry Pi 4 for bench tests, Jetson Orin Nano on the drone, Pixhawk flight controller</dd></div>
+        <div><dt>Tools</dt><dd>TI mmWave SDK (C), Python, libgpiod, oscilloscope, soldering</dd></div>
+      </dl>
+      <div class="story">
+        <p>Our team at Stanford's DroneHacks built a drone that uses a radar to find its way, fusing radar with the camera and the flight controller. Fusion only works if every sensor reading has an accurate time, and the radar's data arrived over USB about 15 ms after each frame started, with no reliable way to know when it was measured. I owned that timing problem, plus getting the radar's raw data and power onto the drone. We placed second for Most Technically Impressive.</p>
+        <div class="dh-media">
+          <figure>
+            <img src="img/radar-drone.jpg" alt="Quadcopter with the red IWR6843 radar board and the green DCA1000 capture board mounted upright in a 3D-printed holder above the frame, cables routed down to the computer below." width="1400" height="1050" loading="lazy">
+            <figcaption>The drone with the radar (red) and the DCA1000 capture board (green) mounted in a 3D-printed holder.</figcaption>
+          </figure>
+          <figure>
+            <img src="img/xt60-buckboost.jpg" alt="XT60 Y-splitter cable with a small red buck-boost converter board tapped off one branch, ending in a DC barrel plug." width="900" height="1200" loading="lazy">
+            <figcaption>The power harness I built: an XT60 splitter off the flight battery, through a buck-boost converter, to a 5 V barrel plug for the capture board.</figcaption>
+          </figure>
+        </div>
+        <h3>Marking every frame start in hardware</h3>
+        <p>The radar's processor gets an interrupt at the start of every frame. In TI's demo firmware, the Data Path Manager already handles that interrupt and calls a frame-start routine, so I added one line at the top of that routine that toggles the GPIO pin driving LED D7. I also removed the demo's other writes to that pin, which would have looked like extra frames. A wire from the D7 pad carries each edge to a Linux computer, where a small logger records it with a kernel timestamp.</p>
+        <table class="results">
+          <tr><th>Test</th><th>Result</th></tr>
+          <tr><td>TI demo + D7, Raspberry Pi, 60 s</td><td>1,202 frames, 0 missed, 12 µs timing jitter. USB data arrived 14.5–15 ms after each frame start.</td></tr>
+          <tr><td>Raw-data firmware + D7, 30 s</td><td>283 frame starts, 0 missed, 11 µs jitter</td></tr>
+          <tr><td>DCA1000 raw capture on the Jetson, 30 s</td><td>600 of 600 frames, 0 lost packets, frame period 49.998 ms</td></tr>
+        </table>
+        <h3>Getting it onto the drone</h3>
+        <ul class="decisions">
+          <li><strong>Without the wire.</strong> The D7 pad is tiny and tore off twice, so for flight we timestamp each frame by its first network packet, fit a line through the very steady frame period, and subtract a fixed delay of about 0.1 ms. The D7 measurements are what proved that delay stays constant.</li>
+          <li><strong>Raw data on the Jetson.</strong> Brought up raw capture through the DCA1000, which needed two fixes: a configuration line the radar refused to start without, and GPU container settings that broke when no monitor was attached.</li>
+          <li><strong>Power from the flight battery.</strong> Built an XT60 splitter with a buck-boost converter to run the capture board at 5 V from the drone's 4S battery, bench-tested under load, so it needs no extra battery.</li>
+          <li><strong>Start once, stream forever.</strong> The radar only streams on its first start after power-up, so a small service starts it once per boot and the drone software just listens. On the drone, radar detections ran at 19.6 Hz into the radar SLAM.</li>
         </ul>
       </div>
     </div>
