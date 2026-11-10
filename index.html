@@ -303,7 +303,7 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
         <h3>Raw radar data on the drone</h3>
         <ul class="decisions">
           <li><strong>Raw capture on the Jetson.</strong> Brought up raw ADC capture through the DCA1000, which needed two fixes: a configuration line the radar refused to start without, and GPU container settings that broke when no monitor was attached. A 30-second test captured 600 of 600 frames with 0 lost packets.</li>
-          <li><strong>Power from the flight battery.</strong> Built an XT60 splitter with a buck-boost converter to run the capture board at 5 V from the drone's 4S battery, bench-tested under load, so it needs no extra battery.</li>
+          <li><strong>Power from the flight battery.</strong> Hand-built an XT60 splitter with a buck-boost converter to run the capture board at 5 V from the drone's 4S battery, bench-tested under load, so it needs no extra battery.</li>
           <li><strong>Start once, stream forever.</strong> The radar only streams on its first start after power-up, so a small service starts it once per boot and the drone software just listens. On the drone, radar detections ran at 19.6 Hz into the radar SLAM.</li>
         </ul>
         <h3>Giving every frame an accurate time</h3>
