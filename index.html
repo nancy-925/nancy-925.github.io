@@ -137,6 +137,8 @@ p { margin: 0; }
 
 .fc-fig { margin: 8px 0 4px; max-width: 520px; }
 .fc-fig img { width: 100%; height: auto; display: block; }
+.fc-sch { margin: 8px 0 4px; max-width: 100%; }
+.fc-sch img { width: 100%; height: auto; display: block; background: #f5f4ee; }
 .dh-media { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; align-items: start; }
 @media (max-width: 640px) { .dh-media { grid-template-columns: minmax(0, 1fr); } }
 .results { border-collapse: collapse; width: 100%; max-width: 66ch; font-size: 15px; }
@@ -345,14 +347,14 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
   <article class="project" id="flight-controller">
     <div class="proj-head">
       <div class="eyebrow">Stanford UAV Club · Skyrunners team</div>
-      <h2>Custom flight controller for a microdrone</h2>
+      <h2>Custom flight controller for a microdrone (Sky Epsilon)</h2>
       <div class="proj-sub"><span class="chip wip">In design</span><span>Technical Lead · Oct 2026 – present (Systems Engineer since Sep 2025)</span></div>
     </div>
     <div class="proj-body">
       <dl class="spec">
         <div><dt>Role</dt><dd>Technical lead for the team</dd></div>
         <div><dt>Board</dt><dd>Flight controller PCB shaped as the drone's frame, motor mounts in its arms</dd></div>
-        <div><dt>Parts</dt><dd>ESP32-S3, MPU-6050 IMU, MOSFET drivers for four brushed motors, buck-boost regulator, 1S LiPo</dd></div>
+        <div><dt>Parts</dt><dd>ESP32-S3, MPU-6050 IMU, MOSFET drivers for four brushed motors, USB-C charging and programming, 3.3 V regulator, 1S LiPo</dd></div>
         <div><dt>Tools</dt><dd>KiCad</dd></div>
       </dl>
       <div class="story">
@@ -362,6 +364,17 @@ footer { color: var(--muted); font-size: 13px; font-family: var(--font-mono); }
           <img src="img/fc-3d.jpg" alt="3D render of the drone-shaped flight controller board: four arms ending in motor rings, the ESP32-S3 module at the front with its antenna past the edge, and the IMU near the center." width="791" height="773" loading="lazy">
           <figcaption>Work in progress: the board placed in KiCad, shown in 3D. The ESP32-S3 antenna hangs past the front edge, the IMU sits near the center of rotation, and motor wire pads sit at the end of each arm. Routing is next.</figcaption>
         </figure>
+        <h3>The schematic</h3>
+        <figure class="fc-sch">
+          <a href="img/fc-schematic.png"><img src="img/fc-schematic.png" alt="KiCad schematic of the Sky Epsilon flight controller: ESP32-S3 module, MPU-6050 IMU on I2C, USB-C connector with ESD protection, battery and USB power path, 3.3 V regulator, four MOSFET motor drivers with flyback diodes, battery voltage divider, and status LEDs." width="1352" height="924" loading="lazy"></a>
+          <figcaption>The full schematic in KiCad (click to enlarge).</figcaption>
+        </figure>
+        <ul>
+          <li><strong>Brain and sensor.</strong> An ESP32-S3 module reads an MPU-6050 IMU over I2C (10 kΩ pull-ups), with the IMU's interrupt line wired back to the ESP32. A ferrite bead and 10 µF + 0.1 µF capacitors filter the ESP32's 3.3 V supply.</li>
+          <li><strong>Power.</strong> USB-C or the 1S battery feeds the system rail: a Schottky diode passes USB power, and a P-channel MOSFET switches the battery in only when USB is unplugged. A 3.3 V regulator powers the logic, and an 82 kΩ / 82 kΩ divider lets the ESP32 measure battery voltage.</li>
+          <li><strong>Motors.</strong> Four low-side N-channel MOSFETs, driven by ESP32 pins, switch the brushed motors. Each has a 10 kΩ gate pull-down so the motors stay off during boot, and a Schottky flyback diode to catch the motor's voltage spike when it switches off.</li>
+          <li><strong>USB.</strong> The USB-C connector uses 5.1 kΩ resistors on its CC pins to request power, and an ESD protection chip guards the data lines that go to the ESP32's built-in USB for programming.</li>
+        </ul>
         <h3>Before this</h3>
         <p>As a systems engineer on the team's fixed-wing autonomous aircraft, I designed and tested fuselage and structural components, and planned the payload layout and vibration-isolating sensor mounts from center-of-gravity analysis.</p>
       </div>
